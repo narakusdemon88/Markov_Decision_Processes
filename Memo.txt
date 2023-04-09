@@ -1,0 +1,53 @@
+Notes:
+
+replaced standard hiive w/
+https://github.com/hiive/hiivemdptoolbox (called jons_hiive)
+
+changed hiive.mdptoolbox.example.py's file to this:
+https://github.com/hiive/hiivemdptoolbox/blob/master/hiive/mdptoolbox/example.py (includes openai method)
+
+Imports like this:
+import jons_hiive.mdptoolbox as toolbox
+import jons_hiive.mdptoolbox.example as example
+
+commented out the # if method=="QLearning": and else and put iterations =... one tab left
+
+
+Frozen lake 16 fields
+enumerated starting from 0 to 15
+partitioned in 4x4 grid (4 rows, 4 columns)
+s = start (0)
+f = frozen (can safely step on)
+h = holes (causes game to end)
+g = goal (causes game to end)
+
+purpose: start at s, go through frozen fields, go to goal
+
+
+we can only step up, down, left, right
+in 0, we are bound by the walls
+
+main purpose: find a path starting at the start to goal by only stepping on frozen fields
+
+h and g are terminal fields because it causes the game to terminate
+
+stepping on h causes us to terminate prematurely
+
+compeltely stochastic environment. some actions will lead us to undesired goals
+
+there are transition probabilities associated with every intitial state and every action in that initial state
+ex: we're in 6 which is a frozen field and we apply the down action. in a purely deterministic environment, we'll go down always. however, there's an associated probability with going in a different direction.
+
+initial state 6, action down
+ideally (purely deterministic) we'll go to 10 the probability is P1
+if we're at 6 and apply action down, there's a certain prob we'll end up in 7 instead or 5 or 2. sum of probs should be equal to 1
+the probabilities are the transition probabilities or state transition probabilities
+
+
+# notes don't use FrozenLake-v0 (use 1 or greater)
+
+
+For example, if action is left and is_slippery is True, then:
+    - P(move left)=1/3
+    - P(move up)=1/3
+    - P(move down)=1/3
