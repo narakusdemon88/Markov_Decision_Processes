@@ -122,13 +122,13 @@ def main():
 
     rolling = calculate_rewards(probabilities=probabilities, rewards=rewards)
 
-    plot_results(x_values=gamma_range, y_values=[i["iterations"] for i in all_iters], ylabel="Iterations",
-                 title="Gamma & Iteration Values (VI) Forest")
-    plot_results(x_values=gamma_range, y_values=[i["time"] for i in all_iters], ylabel="Time (Seconds)",
-                 title="Gamma & Wall Clock Times (VI) Forest")
-    plot_results(x_values=gamma_range, y_values=[i["score"]*10 for i in all_iters], ylabel="Score (Avg)",  # TODO: REMOVE THE 10
-                 title="Gamma & Score (VI) Forest")
-    plot_convergence(rolling=[i*10 for i in rolling])  # TODO: REMOVE THE 500
+    # plot_results(x_values=gamma_range, y_values=[i["iterations"] for i in all_iters], ylabel="Iterations",
+    #              title="Gamma & Iteration Values (VI) Forest")
+    # plot_results(x_values=gamma_range, y_values=[i["time"] for i in all_iters], ylabel="Time (Seconds)",
+    #              title="Gamma & Wall Clock Times (VI) Forest")
+    # plot_results(x_values=gamma_range, y_values=[i["score"]*10 for i in all_iters], ylabel="Score (Avg)",  # TODO: REMOVE THE 10
+    #              title="Gamma & Score (VI) Forest")
+    plot_convergence(rolling=[i for i in rolling])  # TODO: REMOVE THE 500
 
 
 if __name__ == "__main__":

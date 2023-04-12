@@ -132,7 +132,7 @@ def plot_convergence(rolling):
 
 def main():
     # Set up main variables
-    map_size = 50
+    map_size = 25
     initial_probability = 0.9
     env_name = "FrozenLake-v1"
     # gamma_range = [0.0001, 0.001, 0.01, 0.1, 0.5, 0.9, 1.0]
@@ -154,10 +154,10 @@ def main():
     plot_initial(map_size, Policy(policy=last_policy, map_size=map_size, probability=initial_probability), last_policy)
 
     # Plot Metrics
-    plot_results(x_values=gamma_range, y_values=[i["iteration"] for i in all_values], ylabel="Iterations",
-                 title="Gamma & Iteration Values (VI) Frozen Lake")
-    plot_results(x_values=gamma_range, y_values=[i["time"] for i in all_values], ylabel="Time (Seconds)",
-                 title="Gamma & Wall Clock Times (VI) Frozen Lake")
+    # plot_results(x_values=gamma_range, y_values=[i["iteration"] for i in all_values], ylabel="Iterations",
+    #              title="Gamma & Iteration Values (VI) Frozen Lake")
+    # plot_results(x_values=gamma_range, y_values=[i["time"] for i in all_values], ylabel="Time (Seconds)",
+    #              title="Gamma & Wall Clock Times (VI) Frozen Lake")
     plot_results(x_values=gamma_range, y_values=[i["score"]*500 for i in all_values], ylabel="Score (Avg)",  # TODO: REMOVE THE 500
                  title="Gamma & Score (VI) Frozen Lake")
 

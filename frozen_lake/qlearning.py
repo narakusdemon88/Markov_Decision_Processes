@@ -53,7 +53,7 @@ def q_learning(gamma_range: list, probabilities, rewards):
     return all_values
 
 
-def value_iteration(gamma_range: list, probabilities, rewards):
+def q_learning(gamma_range: list, probabilities, rewards):
     all_values = []
 
     for gamma in gamma_range:
@@ -85,19 +85,6 @@ def value_iteration(gamma_range: list, probabilities, rewards):
 
 
 def calculate_rewards(probabilities, rewards):
-    # main_policy = mdp.QLearning(
-    #     transitions=probabilities,
-    #     reward=rewards,
-    #     run_stat_frequency=1,
-    #     alpha=1.0,
-    #     alpha_decay=0.999,
-    #     gamma=0.95,
-    #     epsilon=1.0,
-    #     epsilon_decay=0.5,
-    #     n_iter=10_000
-    #
-    # )
-    # return pd.DataFrame(main_policy.run())["Max V"].rolling(window=500).mean()
     res = [i["Max V"] for i in mdp.QLearning(
         transitions=probabilities,
         reward=rewards,
@@ -189,10 +176,9 @@ def plot_convergence(rolling):
 
 def main():
     # Set up main variables
-    map_size = 50
+    map_size = 25
     initial_probability = 0.9
     env_name = "FrozenLake-v1"
-    # gamma_range = [0.0001, 0.001, 0.01, 0.1, 0.5, 0.9, 1.0]
     gamma_range = [i / 10 for i in range(1, 10)]
 
     # Create the frozen lake map
@@ -201,7 +187,7 @@ def main():
     # Calculate the probability and reward
     probabilities, rewards = get_probability_reward(environment_name=env_name, map=frozen_map)
 
-    all_values = value_iteration(gamma_range=gamma_range, probabilities=probabilities, rewards=rewards)
+    all_values = q_learning(gamma_range=gamma_range, probabilities=probabilities, rewards=rewards)
 
     rolling = calculate_rewards(probabilities=probabilities, rewards=rewards)
 

@@ -84,7 +84,7 @@ def plot_convergence(converge_lst):
 
 def main():
     # Set basic values
-    map_size = 50
+    map_size = 25
     r1 = 4
     r2 = 2
     start_prob = 0.1
@@ -108,10 +108,10 @@ def main():
                                    )
         converge_lst.append(pd.DataFrame(policy_Q.run())['Mean V'].iloc[-1])
 
-    plot_results(x_values=gamma_range, y_values=[i["iterations"] for i in all_iters], ylabel="Iterations",
-                 title="Gamma & Iteration Values (PI) Forest")
-    plot_results(x_values=gamma_range, y_values=[i["time"] for i in all_iters], ylabel="Time (Seconds)",
-                 title="Gamma & Wall Clock Times (PI) Forest")
+    # plot_results(x_values=gamma_range, y_values=[i["iterations"] for i in all_iters], ylabel="Iterations",
+    #              title="Gamma & Iteration Values (PI) Forest")
+    # plot_results(x_values=gamma_range, y_values=[i["time"] for i in all_iters], ylabel="Time (Seconds)",
+    #              title="Gamma & Wall Clock Times (PI) Forest")
     plot_results(x_values=gamma_range, y_values=[i["score"] for i in all_iters], ylabel="Score (Avg)",
                  title="Gamma & Score (PI) Forest")
     plot_convergence(converge_lst=converge_lst)

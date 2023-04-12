@@ -22,8 +22,9 @@ def instantiate_prob_rewards(map_size, r1, r2, start_prob):
 
 
 def calculate_rewards(probabilities, rewards):
-    main_policy = pd.DataFrame(QLearning(transitions=probabilities, reward=rewards, run_stat_frequency=1, alpha=1.0, alpha_decay=0.9999, gamma=0.999, epsilon=1.0, epsilon_decay=0.6, n_iter=50_000).run())
-    return main_policy["Max V"].rolling(100).mean()[100-1::100]
+    main_policy = pd.DataFrame(QLearning(transitions=probabilities, reward=rewards, run_stat_frequency=1, alpha=1.0, alpha_decay=0.9999, gamma=0.999, epsilon=1.0, epsilon_decay=0.6, n_iter=40_000).run())
+    # return main_policy["Max V"].rolling(100).mean()[100-1::100]
+    return main_policy["Max V"]
 
 def plot_convergence(rolling):
     iterations = [i + 1 for i in range(len(rolling))]
@@ -114,7 +115,7 @@ def plot_convergence(converge_lst):
 
 def main():
     # Set basic values
-    map_size = 50
+    map_size = 5
     r1 = 50
     r2 = 2
     start_prob = 0.1
@@ -154,7 +155,7 @@ def main():
     plt.plot(iterations, rolling)
     plt.xlabel("Iterations")
     plt.ylabel("Reward Delta")
-    plt.title(f"Convergence (Q Learning) Frozen Lake")
+    plt.title(f"Convergence (Q Learning) Forest")
     plt.tight_layout()
     plt.grid(visible=True)
     plt.show()
