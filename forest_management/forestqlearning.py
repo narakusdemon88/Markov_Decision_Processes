@@ -9,6 +9,10 @@ from hiive.mdptoolbox.mdp import PolicyIteration, ValueIteration, QLearning
 import time
 import matplotlib.pyplot as plt
 import numpy as np
+from jons_hiive.hiive.mdptoolbox import mdp
+from jons_hiive.hiive.mdptoolbox.example import forest
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 def instantiate_prob_rewards(map_size, r1, r2, start_prob):
@@ -25,6 +29,7 @@ def calculate_rewards(probabilities, rewards):
     main_policy = pd.DataFrame(QLearning(transitions=probabilities, reward=rewards, run_stat_frequency=1, alpha=1.0, alpha_decay=0.9999, gamma=0.999, epsilon=1.0, epsilon_decay=0.6, n_iter=40_000).run())
     # return main_policy["Max V"].rolling(100).mean()[100-1::100]
     return main_policy["Max V"]
+
 
 def plot_convergence(rolling):
     iterations = [i + 1 for i in range(len(rolling))]
@@ -112,14 +117,32 @@ def plot_convergence(converge_lst):
     plt.show()
 
 
+def converge_plots():
+    np.random.seed(2)
+    P, R = forest(S=25)
+    ql = mdp.QLearning(P, R, gamma=0.9, alpha=0.9999, epsilon=0.1, epsilon_decay=0.99, n_iter=10_000_000)
+    res = ql.run()
+    print(np.average([i["Mean V"] for i in res]), [i["Mean V"] for i in res][-1])
+    plt.plot(
+        [i + 1 for i in range(len([i["Mean V"] for i in res]))],
+        [i["Mean V"] for i in res]
+    )
+    plt.xlabel("Iterations")
+    plt.ylabel("Delta Rewards")
+    plt.title("Q Learning Convergence (Forest)")
+    plt.tight_layout()
+    plt.grid(visible=True)
+
+    plt.savefig("Q Learning Convergence (Forest)1.png")
+    plt.clf()
+
 
 def main():
     # Set basic values
-    map_size = 5
+    map_size = 50
     r1 = 50
     r2 = 2
     start_prob = 0.1
-    # gamma_range = [.0001, .001, .01, .1, .3, .6, .8, .9, .95, .999]  # TODO: change this
     gamma_range = [i / 10 for i in range(1, 10)]
 
     probabilities, rewards = instantiate_prob_rewards(
@@ -128,23 +151,11 @@ def main():
         r2=r2,
         start_prob=start_prob)
 
-    # all_iters, converge_list = q_learning(probabilities, rewards, gamma_range, map_size)
     all_iters = q_learning(probabilities, rewards, gamma_range, map_size)
 
-    # converge_lst = []
-    # for i in range(1, map_size):
-    #     policy_Q = QLearning(transitions=probabilities,
-    #                                reward=rewards,
-    #                                n_iter=10_000,
-    #                                gamma=0.999,
-    #                                )
-    #     converge_lst.append(pd.DataFrame(policy_Q.run())['Mean V'].iloc[-1])
-
-    # plot_results(x_values=gamma_range, y_values=[i["policy"] for i in all_iters], ylabel="Policy",
-    #              title="Gamma & Policy Values (Q Learning) Forest")
     plot_results(x_values=gamma_range, y_values=[i["time"] for i in all_iters], ylabel="Time (Seconds)",
                  title="Gamma & Wall Clock Times (Q Learning) Forest")
-    plot_results(x_values=gamma_range, y_values=[i["score"] for i in all_iters], ylabel="Score",
+    plot_results(x_values=gamma_range, y_values=[i["score"]*0.08 for i in all_iters], ylabel="Score",
                  title="Gamma & Score (Q Learning) Forest")
     # plot_convergence(converge_lst=converge_lst)
 

@@ -7,9 +7,9 @@ import time
 from gymnasium.envs.toy_text import frozen_lake
 from jons_hiive.hiive.mdptoolbox.example import openai
 from jons_hiive.hiive.mdptoolbox import mdp
-import pandas as pd
 import matplotlib.pyplot as plt
 import statistics
+import numpy as np
 
 
 def get_probability_reward(environment_name, map):
@@ -94,7 +94,7 @@ def calculate_rewards(probabilities, rewards):
         gamma=0.95,
         epsilon=1.0,
         epsilon_decay=0.5,
-        n_iter=10_000).run()]
+        n_iter=100_000).run()]
 
     averages = []
 
@@ -174,9 +174,28 @@ def plot_convergence(rolling):
     plt.clf()
 
 
+def converge_plots():
+    np.random.seed(23)
+
+    ql = mdp.QLearning(P, R, gamma=0.9, alpha=0.9, epsilon=0.99, epsilon_decay=0.99, n_iter=1_000_000)
+    res = ql.run()
+
+    print(np.average([i["Max V"] for i in res]))
+    plt.plot(
+        [i + 1 for i in range(len([i["Mean V"] for i in res]))],
+        [i["Mean V"] for i in res]
+    )
+    plt.xlabel("Iterations")
+    plt.ylabel("Delta Rewards")
+    plt.title("Q Learning Convergence (Frozen Lake)")
+    plt.grid(visible=True)
+    plt.tight_layout()
+    plt.show()
+
+
 def main():
     # Set up main variables
-    map_size = 25
+    map_size = 30
     initial_probability = 0.9
     env_name = "FrozenLake-v1"
     gamma_range = [i / 10 for i in range(1, 10)]

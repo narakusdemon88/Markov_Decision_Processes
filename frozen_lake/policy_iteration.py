@@ -112,7 +112,7 @@ def plot_initial(map_size: int, plot, last_policy):
                               horizontalalignment="center",
                               verticalalignment="center",
                               color="white")
-    plt.title(f"Policy Iteration {map_size}x{map_size} Frozen Lake Grid")
+    plt.title(f"Value Iteration {map_size}x{map_size} Frozen Lake Grid")
     plt.show()
     plt.clf()
 
@@ -134,7 +134,6 @@ def main():
     map_size = 25
     initial_probability = 0.9
     env_name = "FrozenLake-v1"
-    # gamma_range = [.0001, .001, .01, .1, .3, .6, .8, .9, .95, .999]
     gamma_range = [i / 10 for i in range(1, 10)]
 
     # Create the frozen lake map
